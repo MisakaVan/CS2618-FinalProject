@@ -39,24 +39,6 @@ struct Port{
 
 using portID_t = uint8_t;
 
-// implement std::move
-template <typename T>
-constexpr T&& move(T& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
 
-// implement std::remove_reference
-template <typename T>
-struct remove_reference {
-    using type = T;
-};
-
-// implement std::forward
-template <typename T>
-constexpr T&& forward(typename remove_reference<T>::type& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
 
 #endif //FINALPROJECT_DEFINES_H
