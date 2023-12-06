@@ -32,4 +32,9 @@ enum class RMeasureMode: uint8_t {
     HighR = 1
 };
 
+enum class CMeasureMode: uint8_t {
+    LowR = 0,
+    HighR = 1
+};
+
 #endif //FINALPROJECT_CONSTANTS_H
