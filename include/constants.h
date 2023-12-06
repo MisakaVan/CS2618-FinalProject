@@ -27,14 +27,4 @@ constexpr Port PORTS[PORT_COUNT] = {
         Port(A1, 6, 7)
 };
 
-enum class RMeasureMode: uint8_t {
-    LowR = 0,
-    HighR = 1
-};
-
-enum class CMeasureMode: uint8_t {
-    LowR = 0,
-    HighR = 1
-};
-
 #endif //FINALPROJECT_CONSTANTS_H

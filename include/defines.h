@@ -14,14 +14,36 @@ using capacitance_nanoF_t = ull_int;
 using voltage_t = double;
 
 using pinID_t = uint8_t;
+using portID_t = uint8_t;
 
 
+enum class RMeasureMode : uint8_t {
+    LowR = 0,
+    HighR = 1
+};
+
+enum class CMeasureMode : uint8_t {
+    LowR = 0,
+    HighR = 1
+};
+
+enum class TransistorType : uint8_t {
+    PNP = 0,
+    NPN = 1
+};
+
+enum class ConnectionMode : uint8_t {
+    Null = 0,
+    R,
+    C,
+    T
+};
 
 // A port contains 3 physical pins:
 // 1. An analog pin, directly connected (no resistor) to the outside.
 // 2. A digital pin, connected to the outside via a high-resistance resistor.
 // 3. A digital pin, connected to the outside via a low-resistance resistor.
-struct Port{
+struct Port {
     pinID_t analogPin;
     pinID_t digitalPinHighR;
     pinID_t digitalPinLowR;
@@ -30,7 +52,8 @@ struct Port{
             analogPin(analogPin), digitalPinHighR(digitalPinHighR), digitalPinLowR(digitalPinLowR) {}
 
     // Set all pins to input mode.
-    void clear() const {
+    void clear() const
+    {
         pinMode(analogPin, INPUT);
         pinMode(digitalPinHighR, INPUT);
         pinMode(digitalPinLowR, INPUT);
@@ -38,7 +61,7 @@ struct Port{
 
 };
 
-using portID_t = uint8_t;
+
 
 
 
