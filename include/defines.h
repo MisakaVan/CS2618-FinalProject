@@ -64,5 +64,25 @@ struct Port {
 
 
 
+struct ConnectionState {
+    ConnectionMode mode;
+    union StateData {
+        struct r_field {
+            portID_t port1;
+            portID_t port2;
+        } r;
+        struct c_field {
+            portID_t port1;
+            portID_t port2;
+        } c;
+        struct t_field {
+            TransistorType type;
+            portID_t portB;
+            portID_t portC;
+            portID_t portE;
+        } t;
+    } data;
+};
+
 
 #endif //FINALPROJECT_DEFINES_H
