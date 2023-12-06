@@ -55,7 +55,7 @@ capacitance_nanoF_t measureCapacitance(const Port &port1, const Port &port2)
 
     // time = R * C
     // 1000 ms = 1 ohm * 1e9 nF
-    capacitance_nanoF_t capacitance = static_cast<capacitance_nanoF_t>(timeMiliSec * 1e6 / R);
+    auto capacitance = static_cast<capacitance_nanoF_t>((timeMiliSec / R) * 1000000ll );
     return capacitance;
 
     // TODO: remains to be tested!

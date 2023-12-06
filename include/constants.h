@@ -6,7 +6,7 @@
 #define FINALPROJECT_CONSTANTS_H
 
 #include <Arduino.h>
-#include <math.h>
+#include <math.h> // NOLINT(*-deprecated-headers)
 #include "defines.h"
 
 // The high/low resistance of the resistor in the circuit.
