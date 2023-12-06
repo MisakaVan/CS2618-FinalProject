@@ -8,27 +8,7 @@
 #include <Arduino.h>
 #include "defines.h"
 #include "constants.h"
-
-
-// implement std::move
-template <typename T>
-constexpr T&& move(T& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
-
-// implement std::remove_reference
-template <typename T>
-struct remove_reference {
-    using type = T;
-};
-
-// implement std::forward
-template <typename T>
-constexpr T&& forward(typename remove_reference<T>::type& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
+#include "semantics.h"
 
 // reset all ports/pins to input mode
 void clearPorts()
@@ -74,8 +54,6 @@ constexpr bool isResistorAboveThreshold(resistance_ohm_t resistance)
 
     return resistance > HIGH_RESISTANCE || (HIGH_RESISTANCE / resistance < resistance / LOW_RESISTANCE);
 }
-
-
 
 
 #endif //FINALPROJECT_UTILS_H
