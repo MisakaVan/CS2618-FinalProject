@@ -10,6 +10,7 @@
 
 #include <Arduino.h>
 #include "resistor_measure.h"
+#include "capacitor_measure.h"
 
 void setup()
 {
