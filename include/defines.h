@@ -12,7 +12,7 @@ using ull_int = unsigned long long int;
 using resistance_ohm_t = ull_int;
 using capacitance_nanoF_t = ull_int;
 using voltage_t = double;
-
+using beta_t = double;
 using pinID_t = uint8_t;
 using portID_t = uint8_t;
 
