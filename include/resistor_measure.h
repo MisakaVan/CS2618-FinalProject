@@ -21,7 +21,7 @@
  * @return
  */
 template <RMeasureMode mode>
-resistance_t measureResistance(const Port &port1, const Port &port2)
+resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
 {
     // VCC(port1.analogPin=HIGH) -> R to be measured --*-> ConstantR -> GND(port2.digitalPinHighR=LOW)
     //                                                 *-> AnalogPin(port2.analogPin)
@@ -44,14 +44,14 @@ resistance_t measureResistance(const Port &port1, const Port &port2)
 
     printMsg("Mode: %d", static_cast<int>(mode));
     printMsg("analogRead: %d", analogRead(port2.analogPin));
-    printMsg("voltageOnConstantR: %d / 1000", static_cast<ull_int>(voltageOnConstantR * 1000));
+    printMsg("voltageOnConstantR: %d / 1000", static_cast<int>(voltageOnConstantR * 1000));
 
     // VCC / (R+HighR) = voltageOnConstantR / (HighR)
     // R = HighR * (VCC / voltageOnConstantR - 1)
     if (voltageOnConstantR == 0 || voltageOnConstantR == VCC) {
         return 0;
     }
-    auto resistance = static_cast<resistance_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
+    auto resistance = static_cast<resistance_ohm_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
     return resistance;
 }
 

@@ -10,8 +10,8 @@
 #include "defines.h"
 
 // The high/low resistance of the resistor in the circuit.
-constexpr resistance_t HIGH_RESISTANCE = 100000;
-constexpr resistance_t LOW_RESISTANCE = 500;
+constexpr resistance_ohm_t HIGH_RESISTANCE = 100000;
+constexpr resistance_ohm_t LOW_RESISTANCE = 500;
 // sqrt(HIGH_RESISTANCE * LOW_RESISTANCE)
 
 
