@@ -9,6 +9,27 @@
 #include "defines.h"
 #include "constants.h"
 
+
+// implement std::move
+template <typename T>
+constexpr T&& move(T& arg) noexcept
+{
+    return static_cast<T&&>(arg);
+}
+
+// implement std::remove_reference
+template <typename T>
+struct remove_reference {
+    using type = T;
+};
+
+// implement std::forward
+template <typename T>
+constexpr T&& forward(typename remove_reference<T>::type& arg) noexcept
+{
+    return static_cast<T&&>(arg);
+}
+
 // reset all ports/pins to input mode
 void clearPorts()
 {
@@ -47,7 +68,7 @@ void printMsg(long long int x)
 }
 
 // if R * R > R_HIGH * R_LOW we consider it above threshold.
-constexpr bool isResistorAboveThreshold(resistance_t resistance)
+constexpr bool isResistorAboveThreshold(resistance_ohm_t resistance)
 {
     // notice overflow, so we use division instead of multiplication
 
@@ -56,24 +77,5 @@ constexpr bool isResistorAboveThreshold(resistance_t resistance)
 
 
 
-// implement std::move
-template <typename T>
-constexpr T&& move(T& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
-
-// implement std::remove_reference
-template <typename T>
-struct remove_reference {
-    using type = T;
-};
-
-// implement std::forward
-template <typename T>
-constexpr T&& forward(typename remove_reference<T>::type& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
 
 #endif //FINALPROJECT_UTILS_H
