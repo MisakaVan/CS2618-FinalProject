@@ -12,6 +12,7 @@ using ull_int = unsigned long long int;
 using resistance_ohm_t = ull_int;
 using capacitance_nanoF_t = ull_int;
 using voltage_t = double;
+using current_t = double;  //
 using beta_t = double;
 using pinID_t = uint8_t;
 using portID_t = uint8_t;
@@ -48,6 +49,8 @@ struct Port {
     pinID_t digitalPinHighR;
     pinID_t digitalPinLowR;
 
+    Port(){}  // 
+
     constexpr Port(pinID_t analogPin, pinID_t digitalPinHighR, pinID_t digitalPinLowR) :
             analogPin(analogPin), digitalPinHighR(digitalPinHighR), digitalPinLowR(digitalPinLowR) {}
 
@@ -77,6 +80,7 @@ struct ConnectionState {
         } c;
         struct t_field {
             TransistorType type;
+            beta_t beta;  //
             portID_t portB;
             portID_t portC;
             portID_t portE;

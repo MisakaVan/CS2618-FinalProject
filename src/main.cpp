@@ -66,18 +66,14 @@ void testMainMeasurementToSerial(int intervalMs)
             break;
         }
         case ConnectionMode::T: {
-            auto transistorType = curState.data.t.type;
-            auto measureFunc = transistorType == TransistorType::PNP ?
-                               measureTransistorBeta<TransistorType::PNP> : measureTransistorBeta<TransistorType::NPN>;
-
+            auto transistorType = curState.data.t.type;  // TransistorType
+            beta_t beta = curState.data.t.beta;  // beta
             printMsg("Transistor Type: %s",
                      transistorType == TransistorType::PNP ? "PNP" : "NPN");
-            printMsg("Transistor Beta: %d",
-                     static_cast<int>(measureFunc(
-                             PORTS[curState.data.t.portB],
-                             PORTS[curState.data.t.portC],
-                             PORTS[curState.data.t.portE]
-                     )));
+            printMsg("base: %u", curState.data.t.portB);
+            printMsg("collector: %u", curState.data.t.portC);
+            printMsg("emitter: %u", curState.data.t.portE);
+            printMsg("Transistor Beta: %d", beta);
             break;
         }
     }
