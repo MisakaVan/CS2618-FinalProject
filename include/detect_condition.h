@@ -15,24 +15,24 @@
  * @param resultHolder If the circuit is a transistor, the result (1 type and 3 portIDs) will be stored in this variable.
  * @return Whether the circuit is a transistor.
  */
-bool isTransistor(ConnectionState::StateData::t_field& resultHolder)
+bool isTransistor(ConnectionState::StateData::t_field &resultHolder)
 {
     int count = 0;
     Port resultPort[4];
     resultPort[1] = PORTS[resultHolder.portB];
     resultPort[2] = PORTS[resultHolder.portC];
     resultPort[3] = PORTS[resultHolder.portE];
-    for (int i = 1; i <= 3; i++)
-    {
+    for (int i = 1; i <= 3; i++) {
         clearPorts();
-        for (int j = 1; j <= 3; j++){
+        for (int j = 1; j <= 3; j++) {
             pinMode(resultPort[j].digitalPinLowR, OUTPUT);
             digitalWrite(resultPort[j].digitalPinLowR, LOW);
         }
         pinMode(resultPort[i].digitalPinLowR, OUTPUT);
         digitalWrite(resultPort[i].digitalPinLowR, HIGH);
         delay(1);
-        if (getVoltageAtAnalogPin(resultPort[1]) >= 100 && getVoltageAtAnalogPin(resultPort[2]) >= 100 && getVoltageAtAnalogPin(resultPort[3]) >= 100){
+        if (getVoltageAtAnalogPin(resultPort[1]) >= 100 && getVoltageAtAnalogPin(resultPort[2]) >= 100 &&
+            getVoltageAtAnalogPin(resultPort[3]) >= 100) {
             testTrasistorMeasure(resultPort[1], resultPort[2], resultPort[3], resultHolder);  // further measure
             return true;
         }
@@ -45,7 +45,7 @@ bool isTransistor(ConnectionState::StateData::t_field& resultHolder)
  * @param resultHolder If the circuit is a capacitor, the result (2 portIDs) will be stored in this variable.
  * @return Whether the circuit is a capacitor.
  */
-bool isCapacitor(ConnectionState::StateData::c_field& resultHolder)
+bool isCapacitor(ConnectionState::StateData::c_field &resultHolder)
 {
     Port port1 = PORTS[resultHolder.port1];
     Port port2 = PORTS[resultHolder.port2];
@@ -58,7 +58,7 @@ bool isCapacitor(ConnectionState::StateData::c_field& resultHolder)
  * @param resultHolder If the circuit is a resistor, the result (2 portIDs) will be stored in this variable.
  * @return Whether the circuit is a resistor.
  */
-bool isResistor(ConnectionState::StateData::r_field& resultHolder)
+bool isResistor(ConnectionState::StateData::r_field &resultHolder)
 {
     int last = 0;
     clearPorts();
@@ -80,20 +80,21 @@ bool isResistor(ConnectionState::StateData::r_field& resultHolder)
  * @param resultHolder Changes in-place to store the result.
  * @return void
  */
-void detectConnection(ConnectionState& resultHolder)
+void detectConnection(ConnectionState &resultHolder)
 {
     if (isTransistor(resultHolder.data.t)) {
-      ConnectionMode T;
-      resultHolder.mode = T;
+        resultHolder.mode = ConnectionMode::T;
+        return;
     }
     if (isResistor(resultHolder.data.r)) {
-      ConnectionMode R;
-      resultHolder.mode = R;
+        resultHolder.mode = ConnectionMode::R;
+        return;
     }
     if (isCapacitor(resultHolder.data.c)) {
-      ConnectionMode C;
-      resultHolder.mode = C;
+        resultHolder.mode = ConnectionMode::C;
+        return;
     }
+    resultHolder.mode = ConnectionMode::Null;
 }
 
 
