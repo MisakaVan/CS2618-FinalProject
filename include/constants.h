@@ -10,8 +10,8 @@
 #include "defines.h"
 
 // The high/low resistance of the resistor in the circuit.
-constexpr resistance_ohm_t HIGH_RESISTANCE = 100000;
-constexpr resistance_ohm_t LOW_RESISTANCE = 500;
+constexpr resistance_ohm_t HIGH_RESISTANCE = 200000;
+constexpr resistance_ohm_t LOW_RESISTANCE = 680;
 // sqrt(HIGH_RESISTANCE * LOW_RESISTANCE)
 
 
@@ -22,9 +22,21 @@ constexpr portID_t PORT_COUNT = 3;
 
 // There are 3 ports in the circuit.
 constexpr Port PORTS[PORT_COUNT] = {
-        Port(A3, 2, 3),
-        Port(A2, 4, 5),
-        Port(A1, 6, 7)
+        Port(
+                A5,
+                5,
+                6
+        ),
+        Port(
+                A6,
+                9,
+                10
+        ),
+        Port(
+                A7,
+                11,
+                12
+        )
 };
 
 #endif //FINALPROJECT_CONSTANTS_H
