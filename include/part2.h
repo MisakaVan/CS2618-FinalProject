@@ -25,7 +25,7 @@ current_uA_t resultIb[4][8]{};
 voltage_V_t maxRes_V = 0;
 current_mA_t maxRes_mA = 0;
 
-Adafruit_PCD8544 display2 = Adafruit_PCD8544(8, 7, 17, 16, 15);
+//Adafruit_PCD8544 display2 = Adafruit_PCD8544(8, 7, 17, 16, 15);
 
 voltage_V_t curUb()
 {
@@ -65,116 +65,66 @@ current_mA_t curIc()//毫安
     return (x - y) / R2;
 }
 
-void dispvol()
-{
-    double x = calU_B();
-    double y = calU_C();
-    Serial.print("UB:");
-    Serial.print(x);
-    Serial.print("\n");
-    Serial.print("UC:");
-    Serial.print(y);
-    Serial.println("\n\n");
-}
-
-void dispcur()
-{
-
-    double ib = calI_B();//U_B'
-    double ic = calI_C();//U_C'
-    Serial.print("IB:");
-    Serial.print(ib);
-    Serial.print("\n");
-    Serial.print("IC:");
-    Serial.print(ic);
-    Serial.print("\n\n");
-}
-
-void clear()
+void clearPotentiometer()
 {
     digitalWrite(pin_B_up, LOW);
     digitalWrite(pin_C_up, LOW);
     digitalWrite(pin_B_clk, HIGH);
     digitalWrite(pin_C_clk, HIGH);
-    for (double i = 0; i < 150; i += 1) {
+    for (int i = 0; i < 150; i++) {
         digitalWrite(pin_B_clk, LOW);
         digitalWrite(pin_C_clk, LOW);
         delay(10);
         digitalWrite(pin_B_clk, HIGH);
         digitalWrite(pin_C_clk, HIGH);
         delay(10);
-
     }
 
-    Serial.println("cleared!");
+    printItems("cleared both potentiometers.\n");
 
 }
 
-void add_B(int i)//加的次数，100次加满
-{
-    digitalWrite(pin_B_up, HIGH);
-    digitalWrite(pin_B_clk, HIGH);
-    for (int t = 0; t < i; ++t) {
-        digitalWrite(pin_B_clk, LOW);
-        delay(20);
-        digitalWrite(pin_B_clk, HIGH);
-        delay(20);
-        //Serial.println(calU_B());
-    }
-}
+// templatize the above 4 functions
+enum class Ptt {
+    B, C
+};
 
-void minus_B(int i)//加的次数，100次加满
-{
-    digitalWrite(pin_B_up, LOW);
-    digitalWrite(pin_B_clk, HIGH);
-    for (int t = 0; t < i; ++t) {
-        digitalWrite(pin_B_clk, LOW);
-        delay(20);
-        digitalWrite(pin_B_clk, HIGH);
-        delay(20);
-    }
-}
+enum class Dir {
+    Inc, Dec
+};
 
-void add_C(int i)//加的次数，100次加满
+
+/**
+ * @param count the number of steps to move
+ * @param interval the half T of clk pulse. default to 20ms.
+ */
+template <Ptt potentiometer, Dir direction, int interval = 5>
+void movePtt(int count)
 {
-    digitalWrite(pin_C_up, HIGH);
-    digitalWrite(pin_C_clk, HIGH);
-    for (int t = 0; t < i; ++t) {
-        digitalWrite(pin_C_clk, LOW);
-        delay(20);
-        digitalWrite(pin_C_clk, HIGH);
-        delay(20);
+    const auto pin_up = potentiometer == Ptt::B ? pin_B_up : pin_C_up;
+    const auto pin_clk = potentiometer == Ptt::B ? pin_B_clk : pin_C_clk;
+    const auto value_up = direction == Dir::Inc ? HIGH : LOW;
+    digitalWrite(pin_clk, HIGH);
+    for (int t = 0; t < count; ++t) {
+        digitalWrite(pin_up, value_up);
+        digitalWrite(pin_clk, LOW);
+        delay(interval);
+        digitalWrite(pin_clk, HIGH);
+        delay(interval);
     }
 }
 
-void minus_C(int i)//加的次数，100次加满
+void printAllCurState()
 {
-    digitalWrite(pin_C_up, LOW);
-    digitalWrite(pin_C_clk, HIGH);
-    for (int t = 0; t < i; ++t) {
-        digitalWrite(pin_C_clk, LOW);
-        delay(20);
-        digitalWrite(pin_C_clk, HIGH);
-        delay(20);
-    }
+    printItems("all\n");
+    printItems("ub:", curUb(), "\n");
+    printItems("uc:", curUc(), "\n");
+    printItems("ib:", curIb(), "\n");
+    printItems("ic:", curIc(), "\n");
+    printItems("\n");
 }
 
-void printall()
-{
-    Serial.println("all");
-    Serial.print("ub:");
-    Serial.print(calU_B());
-    Serial.print("\nuc:");
-    Serial.print(calU_C());
-    Serial.print("\nib:");
-    Serial.print(calI_B());
-    Serial.print("\nic:");
-    Serial.print(calI_C());
-    Serial.print("\n");
-    delay(3000);
-}
-
-void setup2()
+void setupPart2(Adafruit_PCD8544 &display2)
 {
     Serial.begin(9600);
     display2.begin();
@@ -185,74 +135,83 @@ void setup2()
     pinMode(pin_C_up, OUTPUT);
     pinMode(pin_C_clk, OUTPUT);
 
-}
-
-void loop2()
-{
-    display2.display();
-    for (int times = 3; times >= 0; --times) {
-        clear();
-        add_B(35 + times * 17);
-        add_C(10);
-        double Ib = calI_B();
-        Serial.println("I_B should be:");
-
-        Serial.println(Ib);
-        //printall();
-        a[times][0] = calU_C();
-        b[times][0] = calI_C();
-        for (int i = 0; i < 7; ++i) {
-            add_C(12);
-            //printall();
-            while (calI_B() - Ib > 0.05 || calI_B() - Ib < -0.05) {
-                if (calI_B() > Ib) minus_B(1);
-                else add_B(1);
-                delay(10);
-            }
-
-            a[times][i + 1] = calU_C();
-            b[times][i + 1] = calI_C();
-            //printall();
-        }
-
-
+    // fill resultUce and resultIc with 0
+    for (int i = 0; i < 4; ++i) {
         for (int t = 0; t < 8; ++t) {
-            Serial.print(a[times][t]);
-            Serial.print("  ");
-            Serial.print(b[times][t]);
-            Serial.print("\n");
-            if (max_x2 < b[times][t]) max_x2 = b[times][t];
-            if (max_x < a[times][t]) max_x = a[times][t];
-        }
-
-        for (int t = 0; t < 8; ++t) {
-            if (t == 0) {
-                display2.drawLine(0, 47, int(a[times][t] * 83 / max_x), 47 - int(b[times][t] * 47 / max_x2), 23);
-            } else {
-                if (int(a[times][t] * 83 / max_x) > 80) {
-                    display2.drawLine(int(a[times][t - 1] * 83 / max_x), 47 - int(b[times][t - 1] * 47 / max_x2), 83,
-                                     47 - int(b[times][t] * 47 / max_x2), 23);
-                } else {
-                    display2.drawLine(int(a[times][t - 1] * 83 / max_x), 47 - int(b[times][t - 1] * 47 / max_x2),
-                                      int(a[times][t] * 83 / max_x), 47 - int(b[times][t] * 47 / max_x2), 23);
-                }
-            }
-            display2.display();
-            delay(200);
+            resultUce[i][t] = 0;
+            resultIc[i][t] = 0;
         }
     }
+    maxRes_mA = 0;
+    maxRes_V = 0;
 
-    delay(10000000);
 }
 
+void mainPart2_NPN(Adafruit_PCD8544 &display2,
+                   current_uA_t IbDelta = 0.01)
+{
+    display2.display();
+    for (int curveIdx = 0; curveIdx < 4; ++curveIdx) {
+        clearPotentiometer();
 
-/**
- * draw the I_c - U_be curve of a transistor.
- * this has been implemented in part2.h.
- */
-void doPart2(){
-    setup2();
-    loop2();
+        // Set the base working point
+        movePtt<Ptt::B, Dir::Inc>(35 + curveIdx * 17);
+        movePtt<Ptt::C, Dir::Inc>(10);
+        delay(10);
+        const current_uA_t baseIb = curIb();
+
+        printItems("I_B(uA) should be: ", baseIb, "\n");
+        //printAllCurState();
+        resultUce[curveIdx][0] = curUc();
+        resultIc[curveIdx][0] = curIc();
+        resultIb[curveIdx][0] = baseIb;
+        for (int pointIdx = 1; pointIdx < 8; ++pointIdx) {
+            movePtt<Ptt::C, Dir::Inc>(12);
+            //printAllCurState();
+            auto ib = curIb();
+            while (ib - baseIb > IbDelta || ib - baseIb < -IbDelta) {
+                if (ib > baseIb) {
+                    movePtt<Ptt::B, Dir::Dec>(1);
+                } else {
+                    movePtt<Ptt::B, Dir::Inc>(1);
+                }
+                delay(10);
+                ib = curIb();
+            }
+            const auto uc = curUc();
+            const auto ic = curIc();
+            resultUce[curveIdx][pointIdx] = uc;
+            resultIc[curveIdx][pointIdx] = ic;
+            resultIb[curveIdx][pointIdx] = ib;
+            maxRes_mA = max(maxRes_mA, ic);
+            maxRes_V = max(maxRes_V, uc);
+            //printAllCurState();
+        }
+
+        printItems("Uce(V)  Ic(mA)  Ib(uA)\n");
+        for (int i = 0; i < 8; ++i) {
+            printItems(resultUce[curveIdx][i], "    ",
+                       resultIc[curveIdx][i], "    ",
+                       resultIb[curveIdx][i], "\n");
+        }
+        printItems("Measured curve ", curveIdx, " finished.\n");
+        printItems("recorded maxRes_mA: ", maxRes_mA, "\n");
+        printItems("recorded maxRes_V: ", maxRes_V, "\n");
+        printItems("\n");
+    }
+    // display the curves
+    for (int curveIdx = 0; curveIdx < 4; ++curveIdx) {
+        int prevX = 0, prevY = 47;
+        for (int t = 0; t < 8; ++t) {
+            int x = min(int(resultUce[curveIdx][t] *83 / maxRes_V), 83);
+            int y = 47 - int(resultIc[curveIdx][t] * 47 / maxRes_mA);
+            display2.drawLine(prevX, prevY, x, y, 23);
+            prevX = x;
+            prevY = y;
+        }
+        display2.display();
+        delay(200);
+    }
 }
 
 
