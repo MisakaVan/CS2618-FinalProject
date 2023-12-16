@@ -10,7 +10,7 @@
 #include "defines.h"
 
 
-voltage_t Result[4];
+voltage_V_t Result[4];
 Port resultPort[4];
 const TransistorType PNP = TransistorType::PNP, NPN = TransistorType::NPN;
 
@@ -46,9 +46,9 @@ void calculateTransistorPNP(const Port &base, const Port &collector, const Port 
     Serial.println(b);
     Serial.println(e);
     Serial.println(c);
-    current_t ib = (100000.0 * b) / double(HIGH_RESISTANCE);
+    current_A_t ib = (100000.0 * b) / double(HIGH_RESISTANCE);
     Serial.println(ib);
-    current_t ic = (100000.0 * c) / double(LOW_RESISTANCE);
+    current_A_t ic = (100000.0 * c) / double(LOW_RESISTANCE);
     Serial.println(ic);
     resultHolder.beta = ic / ib;
 }
@@ -108,9 +108,9 @@ void calculateTransistorNPN(const Port &base, const Port &collector, const Port 
     Serial.println(getVoltageAtAnalogPin(base));
     Serial.println(getVoltageAtAnalogPin(emitter));
     Serial.println(getVoltageAtAnalogPin(collector));
-    current_t ib = (5000000 - 1000000 * getVoltageAtAnalogPin(base)) / double(HIGH_RESISTANCE);
+    current_A_t ib = (5000000 - 1000000 * getVoltageAtAnalogPin(base)) / double(HIGH_RESISTANCE);
     Serial.println(ib);
-    current_t ic = (5000000 - 1000000 * getVoltageAtAnalogPin(collector)) / double(LOW_RESISTANCE);
+    current_A_t ic = (5000000 - 1000000 * getVoltageAtAnalogPin(collector)) / double(LOW_RESISTANCE);
     Serial.println(ic);
     resultHolder.beta = ic / ib;
 }
