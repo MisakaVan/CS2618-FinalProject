@@ -9,15 +9,11 @@
  */
 
 #include <Arduino.h>
-#include <SPI.h>
-#include <Adafruit_GFX.h>
+
+
 #include <Adafruit_PCD8544.h>
 
-#include "resistor_measure.h"
-#include "capacitor_measure.h"
-//#include "transistor_measure_old.h"
-#include "transistor_measure_new.h"
-#include "detect_condition.h"
+#include "part1.h"
 #include "part2.h"
 
 
@@ -42,17 +38,18 @@ void setup()
 //    display.display();
 //    delay(5000);
 //    display.clearDisplay();
-    setup2();
+    delay(5000);
 
 }
 
 void loop()
 {
-//    testPrintMsg();
-//    testMainMeasurementToSerial(5000);
-//    capacitorMeasurePrototype();
-//    testMainMeasurementToDisplay(5000);
-    loop2();
+    printItems("Loop starts.\n");
+
+//    testMainMeasurementToDisplay(display, 5000);
+    setupPart2(display);
+    mainPart2_NPN(display);
+    delay(5000);
 }
 
 
