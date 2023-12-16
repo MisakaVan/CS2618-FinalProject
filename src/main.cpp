@@ -9,32 +9,54 @@
  */
 
 #include <Arduino.h>
+#include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_PCD8544.h>
+
 #include "resistor_measure.h"
 #include "capacitor_measure.h"
-#include "transistor_measure.h"
+//#include "transistor_measure_old.h"
+#include "transistor_measure_new.h"
 #include "detect_condition.h"
+#include "part2.h"
+
+
+
+// Adafruit_PCD8544(CLK,DIN,D/C,CE,RST);
+
 
 /**
  * Basic function test for measuring the R, C, T. Logs to Serial.
  */
 void testMainMeasurementToSerial(int intervalMs = 0);
 
+Adafruit_PCD8544 display = Adafruit_PCD8544(8, 7, 17, 16, 15);
 
 void setup()
 {
-    Serial.begin(9600);
-    while (!Serial) {
-        delay(10);
-    }
-    Serial.println("Serial ready");
+//    Serial.begin(9600);
+//    while (!Serial) {
+//        delay(10);
+//    }
+//    Serial.println("Serial ready");
+//    display.clearDisplay();
+//    display.begin();
+//    display.setContrast(23);
+//    display.println("No connection!");
+//    display.display();
+//    delay(5000);
+//    display.clearDisplay();
+    setup2();
+
 }
 
 void loop()
 {
 //    testPrintMsg();
-//    delay(10000);
 //    testMainMeasurementToSerial(5000);
-    capacitorMeasurePrototype();
+//    capacitorMeasurePrototype();
+//    testMainMeasurementToDisplay(5000);
+    loop2();
 }
 
 
@@ -79,3 +101,141 @@ void testMainMeasurementToSerial(int intervalMs)
     delay(intervalMs);
 
 }
+
+/**
+ * Basic function test for measuring the R, C, T. Logs to LCD.
+ * @param intervalMs
+ */
+void testMainMeasurementToDisplay(int intervalMs)
+{
+    ConnectionState curState{};
+    detectConnection(curState);
+    switch (curState.mode) {
+        case ConnectionMode::Null: {
+            printMsg("No connection detected");
+            display.setCursor(0,0);
+            display.setTextSize(1);
+            display.println("No connection!");
+            display.display();
+            delay(200);
+            display.clearDisplay();
+            break;
+        }
+
+        case ConnectionMode::R: {
+
+            printMsg("port id: %d %d", curState.data.r.port1, curState.data.r.port2);
+            printMsg("Resistance: %d",
+                     static_cast<int>(measureResistance<RMeasureMode::LowR>(
+                             PORTS[curState.data.r.port1],
+                             PORTS[curState.data.r.port2]
+                     )));
+            printMsg("Resistance: %d",
+                     static_cast<int>(measureResistance<RMeasureMode::HighR>(
+                             PORTS[curState.data.r.port1],
+                             PORTS[curState.data.r.port2]
+                     )));
+            display.clearDisplay();
+            display.setCursor(0,0);
+            display.setTextSize(1);
+            display.print("Resistor:");
+            //To Do:判断是高阻还是低阻，并且修改下面一行s为"HIGH"或者"LOW"
+            String s="HIGH";
+            display.print(s);
+
+            display.setCursor(0,12);
+            display.print("Value:");
+
+            //To Do:根据高阻低阻模式把电阻对应的变量名放到下面一行print里
+            display.print(static_cast<int>(measureResistance<RMeasureMode::LowR>(
+                    PORTS[curState.data.r.port1],
+                    PORTS[curState.data.r.port2]
+            )));
+            display.display();
+            delay(200);
+            display.clearDisplay();
+            break;
+        }
+            /*
+            //这部分加上去，LCD不亮了，不知道为什么，我怀疑有bug
+            case ConnectionMode::C: {
+                printMsg("Capacitance: %d",
+                         static_cast<int>(measureCapacitance<CMeasureMode::LowR>(
+                                 PORTS[curState.data.c.port1],
+                                 PORTS[curState.data.c.port2]
+                         )));
+
+                display.clearDisplay();
+                display.setCursor(0,0);
+                display.setTextSize(1);
+                display.print("Capacitor:");
+                //To Do:判断是高电容还是低电容，并且修改下面一行s为"HIGH"或者"LOW"
+                String s="HIGH";
+                display.print(s);
+
+                display.setCursor(0,12);
+                display.print("Value:");
+                //To Do:根据高阻低阻模式把电阻对应的变量名放到下面一行print里
+                display.print(static_cast<int>(measureCapacitance<CMeasureMode::LowR>(
+                                 PORTS[curState.data.c.port1],
+                                 PORTS[curState.data.c.port2]
+                         )));
+                display.display();
+                delay(200);
+                display.clearDisplay();
+                break;
+            }
+            */
+        case ConnectionMode::T: {
+            auto transistorType = curState.data.t.type;  // TransistorType
+            beta_t beta = curState.data.t.beta;  // beta
+            printMsg("Transistor Type: %s",
+                     transistorType == TransistorType::PNP ? "PNP" : "NPN");
+            printMsg("base: %u", curState.data.t.portB);
+            printMsg("collector: %u", curState.data.t.portC);
+            printMsg("emitter: %u", curState.data.t.portE);
+            Serial.print("Transistor Beta: ");
+            Serial.print(curState.data.t.beta);
+            Serial.print('\n');
+
+
+            display.setCursor(0,0);
+            display.setTextSize(1);
+            display.print("Transistor:");
+            String s=transistorType == TransistorType::PNP ? "PNP" : "NPN";
+            display.print(s);
+            display.print("\n");
+
+            display.setCursor(0,12);
+            display.print("Base:");
+            display.print(curState.data.t.portB);
+            display.print("\n");
+
+            display.setCursor(0,21);
+            display.print("Collector:");
+            display.print(curState.data.t.portC);
+            display.print("\n");
+
+            display.setCursor(0,30);
+            display.print("Emitter:");
+            display.print(curState.data.t.portE);
+            display.print("\n");
+
+            display.setCursor(0,39);
+            display.print("Beta:");
+            display.print(curState.data.t.beta);
+            display.print("\n");
+            display.display();
+
+            delay(200);
+            display.clearDisplay();
+            break;
+        }
+    }
+
+    delay(intervalMs);
+
+}
+
+
+

@@ -39,4 +39,21 @@ constexpr Port PORTS[PORT_COUNT] = {
         )
 };
 
+// pins for the part 2
+constexpr pinID_t
+        pin_B = A7,
+        pin_B_out = A5,
+        pin_C = A6,
+        pin_C_out = A4,
+        pin_B_up = 10,
+        pin_B_clk = 9,
+        pin_C_up = 6,
+        pin_C_clk = 5;
+
+const double R1=0.2;
+const double R2=0.68;
+
+
+
+
 #endif //FINALPROJECT_CONSTANTS_H
