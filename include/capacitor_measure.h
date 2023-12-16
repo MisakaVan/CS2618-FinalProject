@@ -61,4 +61,45 @@ capacitance_nanoF_t measureCapacitance(const Port &port1, const Port &port2)
     // TODO: remains to be tested!
 }
 
+void capacitorMeasurePrototype(){
+    clearPorts();
+    auto port1 = PORTS[0];
+    auto port2 = PORTS[1];
+    auto pin1 = port1.digitalPinHighR;
+    auto pin2 = port2.digitalPinHighR;
+    pinMode(pin1, OUTPUT);
+    pinMode(pin2, OUTPUT);
+    digitalWrite(pin2, LOW);
+
+    while (true) {
+        printMsg("=====Charging=====");
+        auto curTime = micros();
+
+        digitalWrite(pin1, HIGH);
+        for (;;) {
+//            printMsg("analogRead: %d", analogRead(port1.analogPin));
+            auto highV = analogRead(port1.analogPin);
+            auto lowV = analogRead(port2.analogPin);
+            auto deltaV = highV - lowV;
+            if (deltaV > 646) {
+                // charged for a RC time
+                break;
+            }
+//            printMsg("delta V: %d", highV - lowV);
+
+        }
+        auto timeElapsedMs = micros() - curTime;
+        printMsg("timeElapsedMs: %d", timeElapsedMs);
+
+        // t = R * C = (HighR + LowR) * C
+        capacitance_nanoF_t c = static_cast<capacitance_nanoF_t>(timeElapsedMs * 1e3 / (HIGH_RESISTANCE + HIGH_RESISTANCE)) ;
+        printMsg("capacitance: %d", static_cast<int>(c));
+
+        printMsg("=====Discharging=====");
+        digitalWrite(pin1, LOW);
+
+        delay(8000);
+    }
+}
+
 #endif //FINALPROJECT_CAPACITOR_MEASURE_H

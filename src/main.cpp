@@ -31,12 +31,10 @@ void setup()
 
 void loop()
 {
-//    // test resistance measure
-//    testResistanceMeasure(PORTS[0], PORTS[1]);
-//
-//    delay(1000);
-
-    testMainMeasurementToSerial(5000);
+//    testPrintMsg();
+//    delay(10000);
+//    testMainMeasurementToSerial(5000);
+    capacitorMeasurePrototype();
 }
 
 
