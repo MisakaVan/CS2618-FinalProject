@@ -47,6 +47,19 @@ void printMsg(long long int x)
     printMsg("%lld", x);
 }
 
+template <typename T>
+void printItems(T arg)
+{
+    Serial.print(forward<T>(arg));
+}
+
+template <typename firstArg, typename ...Args>
+void printItems(firstArg arg, Args... args)
+{
+    Serial.print(forward<firstArg>(arg));
+    printItems(forward<Args>(args)...);
+}
+
 // if R * R > R_HIGH * R_LOW we consider it above threshold.
 constexpr bool isResistorAboveThreshold(resistance_ohm_t resistance)
 {
