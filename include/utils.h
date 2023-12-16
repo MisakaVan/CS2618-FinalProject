@@ -60,6 +60,20 @@ void printItems(firstArg arg, Args... args)
     printItems(forward<Args>(args)...);
 }
 
+template <typename T>
+void printItemsToDisplay( Adafruit_PCD8544 &display, T arg)
+{
+    display.print(forward<T>(arg));
+}
+
+template <typename firstArg, typename ...Args>
+void printItemsToDisplay( Adafruit_PCD8544 &display, firstArg arg, Args... args)
+{
+    display.print(forward<firstArg>(arg));
+    printItemsToDisplay(display, forward<Args>(args)...);
+}
+
+
 // if R * R > R_HIGH * R_LOW we consider it above threshold.
 constexpr bool isResistorAboveThreshold(resistance_ohm_t resistance)
 {

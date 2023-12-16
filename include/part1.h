@@ -183,28 +183,20 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
             display.setTextSize(1);
             display.print("Transistor:");
             String s = transistorType == TransistorType::PNP ? "PNP" : "NPN";
-            display.print(s);
-            display.print("\n");
+            printItemsToDisplay(display, s, "\n");
 
             display.setCursor(0, 12);
-            display.print("Base:");
-            display.print(curState.data.t.portB);
-            display.print("\n");
+            printItemsToDisplay(display, "Base:", curState.data.t.portB, "\n");
 
             display.setCursor(0, 21);
-            display.print("Collector:");
-            display.print(curState.data.t.portC);
-            display.print("\n");
+            printItemsToDisplay(display, "Collector:", curState.data.t.portC, "\n");
 
             display.setCursor(0, 30);
-            display.print("Emitter:");
-            display.print(curState.data.t.portE);
-            display.print("\n");
+            printItemsToDisplay(display, "Emitter:", curState.data.t.portE, "\n");
 
             display.setCursor(0, 39);
-            display.print("Beta:");
-            display.print(curState.data.t.beta);
-            display.print("\n");
+            printItemsToDisplay(display, "Beta:", curState.data.t.beta, "\n");
+
             display.display();
 
             delay(200);
