@@ -39,7 +39,7 @@ constexpr Port PORTS[PORT_COUNT] = {
         )
 };
 
-// pins for the part 2
+// constants for the part 2
 constexpr pinID_t
         pin_B = A7,
         pin_B_out = A5,
@@ -54,6 +54,11 @@ const resistance_MOhm_t R1 = 0.2;
 const resistance_kOhm_t R2 = 0.68;
 
 
-
+// constants for display
+constexpr pinID_t SCLK = 8,
+        DIN = 7,
+        DC = 17,
+        CS = 16,
+        RST = 15;
 
 #endif //FINALPROJECT_CONSTANTS_H

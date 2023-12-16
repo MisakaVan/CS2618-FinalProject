@@ -26,7 +26,7 @@
 
 
 
-Adafruit_PCD8544 display = Adafruit_PCD8544(8, 7, 17, 16, 15);
+Adafruit_PCD8544 display = Adafruit_PCD8544(SCLK, DIN, DC, CS, RST);
 
 void setup()
 {
