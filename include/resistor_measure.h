@@ -51,7 +51,14 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     if (voltageOnConstantR == 0 || voltageOnConstantR == VCC) {
         return 0;
     }
-    auto resistance = static_cast<resistance_ohm_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
+//    auto resistance = static_cast<resistance_ohm_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
+    // Avoid overflow in double.
+    double ratioOfConstantR = VCC / voltageOnConstantR - 1;
+    auto resistance = static_cast<resistance_ohm_t>(constantR * ratioOfConstantR);
+    // logging
+    printMsg("ratioOfConstantR: %d / 1000", static_cast<int>(ratioOfConstantR * 1000));
+    printMsg("constantR: %d", static_cast<int>(constantR));
+    printMsg("resistance: %d", static_cast<int>(resistance));
     return resistance;
 }
 
@@ -61,9 +68,11 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
 void testResistanceMeasure(const Port &port1, const Port &port2)
 {
     auto resistance = measureResistance<RMeasureMode::LowR>(port1, port2);
-    printMsg("LowR: %d", static_cast<int>(resistance));
+    printMsg("LowR: %lld", resistance);
+
     resistance = measureResistance<RMeasureMode::HighR>(port1, port2);
-    printMsg("HighR: %d", static_cast<int>(resistance));
+    printMsg("HighR: %lld", resistance);
+
     printMsg("====================================");
 
     delay(5 * 1000);
