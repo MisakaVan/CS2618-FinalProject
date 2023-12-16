@@ -20,7 +20,7 @@ void clearPorts()
 
 // Measure the voltage at the analog pin of the given _port.
 // Assume the analog pin is already set to input mode.
-voltage_t getVoltageAtAnalogPin(const Port &_port)
+voltage_V_t getVoltageAtAnalogPin(const Port &_port)
 {
     return static_cast<double>(analogRead(_port.analogPin)) / 1023.0 * VCC;
 }

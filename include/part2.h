@@ -18,15 +18,16 @@
 // int C_clk=9;
 
 
-double a[4][8]{};
+voltage_V_t resultUce[4][8]{};
+current_mA_t resultIc[4][8]{};
+current_uA_t resultIb[4][8]{};
 
-double b[4][8]{};
-double max_x = 0;
-double max_x2 = 0;
+voltage_V_t maxRes_V = 0;
+current_mA_t maxRes_mA = 0;
 
 Adafruit_PCD8544 display2 = Adafruit_PCD8544(8, 7, 17, 16, 15);
 
-double calU_B()
+voltage_V_t curUb()
 {
     double x1 = analogRead(pin_B) * 5.0 / 1023.0;
     delay(5);
@@ -38,7 +39,7 @@ double calU_B()
     return x;
 }
 
-double calU_C()
+voltage_V_t curUc()
 {
     double x1 = analogRead(pin_C) * 5.0 / 1023.0;
     delay(5);
@@ -50,14 +51,14 @@ double calU_C()
     return x;
 }
 
-double calI_B()//微安
+current_uA_t curIb()//微安
 {
     double x = analogRead(pin_B_out) * 5.0 / 1023.0;
     double y = analogRead(pin_B) * 5.0 / 1023.0;
     return (x - y) / R1;
 }
 
-double calI_C()//毫安
+current_mA_t curIc()//毫安
 {
     double x = analogRead(pin_C_out) * 5.0 / 1023.0;
     double y = analogRead(pin_C) * 5.0 / 1023.0;

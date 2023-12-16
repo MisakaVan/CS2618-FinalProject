@@ -10,9 +10,14 @@
 using ull_int = unsigned long long int;
 
 using resistance_ohm_t = ull_int;
+using resistance_kOhm_t = double;
+using resistance_MOhm_t = double;
 using capacitance_nanoF_t = ull_int;
-using voltage_t = double;
-using current_t = double;  //
+using voltage_V_t = double;
+using voltage_mV_t = double;
+using current_A_t = double;
+using current_mA_t = double;
+using current_uA_t = double;
 using beta_t = double;
 using pinID_t = uint8_t;
 using portID_t = uint8_t;

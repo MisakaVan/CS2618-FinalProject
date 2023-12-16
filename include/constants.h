@@ -16,7 +16,7 @@ constexpr resistance_ohm_t LOW_RESISTANCE = 680;
 
 
 // The voltage of the power supply.
-constexpr voltage_t VCC = 5.0;
+constexpr voltage_V_t VCC = 5.0;
 
 constexpr portID_t PORT_COUNT = 3;
 
@@ -50,8 +50,8 @@ constexpr pinID_t
         pin_C_up = 6,
         pin_C_clk = 5;
 
-const double R1=0.2;
-const double R2=0.68;
+const resistance_MOhm_t R1 = 0.2;
+const resistance_kOhm_t R2 = 0.68;
 
 
 
