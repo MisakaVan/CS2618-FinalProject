@@ -26,56 +26,63 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     // VCC(port1.analogPin=HIGH) -> R to be measured --*-> ConstantR -> GND(port2.digitalPinHighR=LOW)
     //                                                 *-> AnalogPin(port2.analogPin)
     // use port2.analogPin to measure the voltageOnConstantR between R and port2.digitalPinHighR (*)
-
     clearPorts();
+    const auto constantR =
+            mode == RMeasureMode::LowR ? LOW_RESISTANCE : HIGH_RESISTANCE;
+    const auto port2DigitalPin =
+            mode == RMeasureMode::LowR ? port2.digitalPinLowR : port2.digitalPinHighR;
+
     pinMode(port1.analogPin, OUTPUT);
     digitalWrite(port1.analogPin, HIGH);
-    if (mode == RMeasureMode::LowR) {
-        pinMode(port2.digitalPinLowR, OUTPUT);
-        digitalWrite(port2.digitalPinLowR, LOW);
-    } else {
-        pinMode(port2.digitalPinHighR, OUTPUT);
-        digitalWrite(port2.digitalPinHighR, LOW);
-    }
-    delay(1);
+    pinMode(port2DigitalPin, OUTPUT);
+    digitalWrite(port2DigitalPin, LOW);
+    delay(20);
 
-    const auto voltageOnConstantR = getVoltageAtAnalogPin(port2);
-    const auto constantR = mode == RMeasureMode::LowR ? LOW_RESISTANCE : HIGH_RESISTANCE;
-
-    printMsg("Mode: %d", static_cast<int>(mode));
-    printMsg("analogRead: %d", analogRead(port2.analogPin));
-    printMsg("voltageOnConstantR: %d / 1000", static_cast<int>(voltageOnConstantR * 1000));
+    const auto aR = analogRead(port2.analogPin);
+//    const auto voltageOnConstantR = aR / 1023.0 * VCC;
 
     // VCC / (R+HighR) = voltageOnConstantR / (HighR)
     // R = HighR * (VCC / voltageOnConstantR - 1)
-    if (voltageOnConstantR == 0 || voltageOnConstantR == VCC) {
+    // auto resistance = static_cast<resistance_ohm_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
+    // Avoid overflow in double.
+    double ratioOfConstantR = 1023.0 / aR - 1;
+    auto resistance = static_cast<resistance_ohm_t>(constantR * ratioOfConstantR);
+//    auto resistance_k = static_cast<resistance_kOhm_t>(constantR / 1000.0 * ratioOfConstantR);
+    // logging
+    printItems(">>> measureR\n");
+//    printItems("    Mode: ", mode == RMeasureMode::LowR ? "LowR" : "HighR", '\n');
+    printItems("    AnalogRead: ", aR, '\n');
+//    printItems("    Voltage on constantR: ", voltageOnConstantR, '\n');
+//    printItems("    Ratio of constantR: ", ratioOfConstantR, '\n');
+//    printItems("    ConstantR: ", static_cast<unsigned long>(constantR), '\n');
+    printItems("    Resistance(ohm): ", static_cast<unsigned long>(resistance), '\n');
+//    printItems("    Resistance(kOhm): ", resistance_k, '\n');
+    printItems("<<< measureR", '\n');
+
+    if (aR <= 3 || aR >= 1015) {
+        // aR too small means the R to be measured is too large for the given constant R.
+        // aR too large means the R to be measured is too small for the given constant R.
+        // abort for accuracy.
         return 0;
     }
-//    auto resistance = static_cast<resistance_ohm_t>(constantR * (VCC - voltageOnConstantR) / voltageOnConstantR );
-    // Avoid overflow in double.
-    double ratioOfConstantR = VCC / voltageOnConstantR - 1;
-    auto resistance = static_cast<resistance_ohm_t>(constantR * ratioOfConstantR);
-    // logging
-    printMsg("ratioOfConstantR: %d / 1000", static_cast<int>(ratioOfConstantR * 1000));
-    printMsg("constantR: %d", static_cast<int>(constantR));
-    printMsg("resistance: %d", static_cast<int>(resistance));
+
     return resistance;
 }
 
-// A test around measureResistance.
-// Measure the resistance around two given ports.
-// Print the resistance to Serial.
-void testResistanceMeasure(const Port &port1, const Port &port2)
-{
-    auto resistance = measureResistance<RMeasureMode::LowR>(port1, port2);
-    printMsg("LowR: %lld", resistance);
-
-    resistance = measureResistance<RMeasureMode::HighR>(port1, port2);
-    printMsg("HighR: %lld", resistance);
-
-    printMsg("====================================");
-
-    delay(5 * 1000);
-}
+//// A test around measureResistance.
+//// Measure the resistance around two given ports.
+//// Print the resistance to Serial.
+//void testResistanceMeasure(const Port &port1, const Port &port2)
+//{
+//    auto resistance = measureResistance<RMeasureMode::LowR>(port1, port2);
+//    printMsg("LowR: %lld", resistance);
+//
+//    resistance = measureResistance<RMeasureMode::HighR>(port1, port2);
+//    printMsg("HighR: %lld", resistance);
+//
+//    printMsg("====================================");
+//
+//    delay(5 * 1000);
+//}
 
 #endif //FINALPROJECT_RESISTOR_MEASURE_H

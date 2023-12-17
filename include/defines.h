@@ -9,10 +9,10 @@
 
 using ull_int = unsigned long long int;
 
-using resistance_ohm_t = ull_int;
+using resistance_ohm_t = unsigned long;
 using resistance_kOhm_t = double;
 using resistance_MOhm_t = double;
-using capacitance_nanoF_t = ull_int;
+using capacitance_nanoF_t = double;
 using voltage_V_t = double;
 using voltage_mV_t = double;
 using current_A_t = double;

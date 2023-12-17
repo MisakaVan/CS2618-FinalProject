@@ -10,7 +10,7 @@
 #include "defines.h"
 
 
-voltage_V_t Result[4];
+voltage_V_t Result[4]{};
 Port resultPort[4];
 const TransistorType PNP = TransistorType::PNP, NPN = TransistorType::NPN;
 
@@ -158,7 +158,7 @@ void analyseTransistorNPN(int x, int y, int z, ConnectionState::StateData::t_fie
 void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port3,
                           ConnectionState::StateData::t_field &resultHolder)
 {
-    bool feature[4];
+//    bool feature[4];
     int count = 0;
     bool h[4] = {false, false, false, false};
 
@@ -187,9 +187,9 @@ void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port
     Serial.println(count);
     if (count == 1)  // PNP
     {
-        int i = 0;
+        int i;
         for (i = 1; i <= 3; ++i) {
-            if (h[i] == true) break;
+            if (h[i]) break;
         }
         resultHolder.type = PNP;
         switch (i) {
@@ -216,11 +216,11 @@ void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port
     {
         int i;
         for (i = 1; i <= 3; ++i) {
-            if (h[i] == false) break;
+            if (!h[i]) break;
         }
         resultHolder.type = NPN;
         /*
-        if (!feature[1])
+        if (!feature[1])s
             analyseTransistorNPN(1, 2, 3, resultHolder);
         else if (!feature[2])
             analyseTransistorNPN(2, 1, 3, resultHolder);
