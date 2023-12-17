@@ -9,12 +9,15 @@
  */
 
 #include <Arduino.h>
-
-
 #include <Adafruit_PCD8544.h>
 
+# define PART 1
+
+#if PART == 1
 #include "part1.h"
-//#include "part2.h"
+#elif PART == 2
+#include "part2.h"
+#endif
 
 
 
@@ -27,26 +30,14 @@ Adafruit_PCD8544 display = Adafruit_PCD8544(8, 7, 17, 16, 15);
 void setup()
 {
 
+#if PART == 1
+    setupPart1(display);
+#elif PART == 2
+    setupPart2(display);
+#endif
 //    setupPart1(display);
 //    setupPart2(display);
 
-
-
-    clearPorts();
-    Serial.begin(9600);
-    while (!Serial) {
-        delay(10);
-    }
-    Serial.println("Serial ready");
-    display.begin();
-//    display.setContrast(23);
-    display.setContrast(40);
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.println("No connection!");
-    display.display();
-    delay(5000);
-    display.clearDisplay();
 
 
 }
@@ -54,8 +45,11 @@ void setup()
 void loop()
 {
     printItems("\n\nLoop starts.\n");
+#if PART == 1
     testMainMeasurementToDisplay(display, 1);
-
+#elif PART == 2
+    mainPart2(display);
+#endif
 
 //    setupPart2(display);
 //    mainPart2_NPN(display);

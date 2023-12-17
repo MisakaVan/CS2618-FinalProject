@@ -25,7 +25,7 @@ void setupPart1(Adafruit_PCD8544 &display)
     }
     Serial.println("Serial ready");
     display.begin();
-    display.setContrast(23);
+    display.setContrast(40);
     display.clearDisplay();
     display.setTextSize(1);
     display.println("No connection!");
