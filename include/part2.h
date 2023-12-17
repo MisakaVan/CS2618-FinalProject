@@ -10,6 +10,7 @@
 #include <Adafruit_PCD8544.h>
 
 #include "constants.h"
+#include "utils.h"
 
 // int B_control=6;
 // int B_clk=5;

@@ -48,7 +48,7 @@ void loop()
 #if PART == 1
     testMainMeasurementToDisplay(display, 1);
 #elif PART == 2
-    mainPart2(display);
+    mainPart2_NPN(display);
 #endif
 
 //    setupPart2(display);
