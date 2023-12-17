@@ -101,17 +101,30 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
 
         case ConnectionMode::R: {
 
-            printMsg("port id: %d %d", curState.data.r.port1, curState.data.r.port2);
-            printMsg("Resistance: %d",
-                     static_cast<int>(measureResistance<RMeasureMode::LowR>(
-                             PORTS[curState.data.r.port1],
-                             PORTS[curState.data.r.port2]
-                     )));
-            printMsg("Resistance: %d",
-                     static_cast<int>(measureResistance<RMeasureMode::HighR>(
-                             PORTS[curState.data.r.port1],
-                             PORTS[curState.data.r.port2]
-                     )));
+//            printMsg("port id: %d %d", curState.data.r.port1, curState.data.r.port2);
+            printItems("port id: ", curState.data.r.port1, " ", curState.data.r.port2, "\n");
+
+//            printMsg("Resistance: %d",
+//                     static_cast<int>(measureResistance<RMeasureMode::LowR>(
+//                             PORTS[curState.data.r.port1],
+//                             PORTS[curState.data.r.port2]
+//                     )));
+            const int r_h = static_cast<int>(measureResistance<RMeasureMode::HighR>(
+                    PORTS[curState.data.r.port1],
+                    PORTS[curState.data.r.port2]
+            ));
+            printItems("R from HighR mode: ", r_h, "\n");
+//            printMsg("Resistance: %d",
+//                     static_cast<int>(measureResistance<RMeasureMode::HighR>(
+//                             PORTS[curState.data.r.port1],
+//                             PORTS[curState.data.r.port2]
+//                     )));
+            const int r_l = static_cast<int>(measureResistance<RMeasureMode::LowR>(
+                    PORTS[curState.data.r.port1],
+                    PORTS[curState.data.r.port2]
+            ));
+            printItems("R from LowR mode: ", r_l, "\n");
+
             display.clearDisplay();
             display.setCursor(0, 0);
             display.setTextSize(1);
@@ -124,10 +137,7 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
             display.print("Value:");
 
             //To Do:根据高阻低阻模式把电阻对应的变量名放到下面一行print里
-            display.print(static_cast<int>(measureResistance<RMeasureMode::LowR>(
-                    PORTS[curState.data.r.port1],
-                    PORTS[curState.data.r.port2]
-            )));
+            display.print(r_l);
             display.display();
             delay(200);
             display.clearDisplay();
