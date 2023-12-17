@@ -58,7 +58,7 @@ void dischargeCapacitor(const Port &port1, const Port &port2)
 //    auto capacitance = static_cast<capacitance_nanoF_t>((timeMiliSec / R) * 1000000ll );
 //    return capacitance;
 //
-//    // TODO: remains to be tested!
+//    // remains to be tested!
 //}
 
 //void capacitorMeasurePrototype()
