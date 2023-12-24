@@ -140,18 +140,18 @@ bool isCapacitor(ConnectionState::StateData::c_field &resultHolder)
     for (int i = 0; i < 3; i++) {
         int port1 = i;
         int port2 = (i + 1) % 3;
-        const auto& port_a = PORTS[port1];
-        const auto& port_b = PORTS[port2];
+        const auto &port_a = PORTS[port1];
+        const auto &port_b = PORTS[port2];
         clearPorts();
         // Port port1 = PORTS[resultHolder.port1];
         // Port port2 = PORTS[resultHolder.port2];
-        Serial.println("bbb");
+//        Serial.println("bbb");
 //        capacitance_nanoF_t capacitance = measureCapacitance<CMeasureMode::LowR>(port_a, port_b);  // to test
         capacitance_nanoF_t capacitance = measureCapacitancePrototype<
                 CMeasureMode::LowR, CMeasureMode::HighR>(port_a, port_b);  // to test
         // use a high R and a low R for faster measurement
 
-        if (capacitance > 0.5) {
+        if (capacitance > IS_C_LOWER_TH) {
             resultHolder.port1 = port1;
             resultHolder.port2 = port2;
             return true;
@@ -182,10 +182,26 @@ bool isResistor(ConnectionState::StateData::r_field &resultHolder)
         digitalWrite(port_a.digitalPinLowR, HIGH);
         pinMode(port_b.digitalPinLowR, OUTPUT);
         digitalWrite(port_b.digitalPinLowR, LOW);
-        delay(200);
+
+        // if it is a capacitor, the v on port_a will increase
+        // (maybe very slow) eventually to 1023.
+        int prevValue, curValue = 0;
+        do {
+            prevValue = curValue;
+            delay(1000);
+            curValue = analogRead(port_a.analogPin);
+            printItems("<!> ", curValue, '\n');
+        } while (curValue > prevValue && curValue < 1023);
+
         // Serial.println(getVoltageAtAnalogPin(port_b));
         // Serial.println(getVoltageAtAnalogPin(port_a));
-        if (analogRead(port_b.analogPin) > 0 || analogRead(port_a.analogPin) < 1023) {
+        if (analogRead(port_b.analogPin) > 1 || curValue < 1022) {
+        // if the r is too large, consider it as a capacitor
+            const auto r = measureResistance<RMeasureMode::HighR>(port_a, port_b);
+            if (r > 2000000) {
+                return false;
+            }
+
             resultHolder.port1 = port1;
             resultHolder.port2 = port2;
             return true;
@@ -214,7 +230,7 @@ void detectConnection(ConnectionState &resultHolder)
     }
     printItems("    Trying C...\n");
     if (isCapacitor(resultHolder.data.c)) {
-        Serial.println("ddd");
+
         resultHolder.mode = ConnectionMode::C;
         return;
     }

@@ -11,7 +11,7 @@
 #include <Arduino.h>
 #include <Adafruit_PCD8544.h>
 
-# define PART 1
+# define PART 2
 
 #if PART == 1
 #include "part1.h"
@@ -53,7 +53,7 @@ void loop()
 
 //    setupPart2(display);
 //    mainPart2_NPN(display);
-    delay(1000);
+    delay(10000);
 }
 
 

@@ -49,15 +49,15 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     auto resistance = static_cast<resistance_ohm_t>(constantR * ratioOfConstantR);
 //    auto resistance_k = static_cast<resistance_kOhm_t>(constantR / 1000.0 * ratioOfConstantR);
     // logging
-    printItems(">>> measureR\n");
+//    printItems(">>> measureR\n");
 //    printItems("    Mode: ", mode == RMeasureMode::LowR ? "LowR" : "HighR", '\n');
-    printItems("    AnalogRead: ", aR, '\n');
+//    printItems("    AnalogRead: ", aR, '\n');
 //    printItems("    Voltage on constantR: ", voltageOnConstantR, '\n');
 //    printItems("    Ratio of constantR: ", ratioOfConstantR, '\n');
 //    printItems("    ConstantR: ", static_cast<unsigned long>(constantR), '\n');
-    printItems("    Resistance(ohm): ", static_cast<unsigned long>(resistance), '\n');
+//    printItems("    Resistance(ohm): ", static_cast<unsigned long>(resistance), '\n');
 //    printItems("    Resistance(kOhm): ", resistance_k, '\n');
-    printItems("<<< measureR", '\n');
+//    printItems("<<< measureR", '\n');
 
     if (aR <= 3 || aR >= 1015) {
         // aR too small means the R to be measured is too large for the given constant R.

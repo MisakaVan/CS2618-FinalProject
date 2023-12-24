@@ -25,7 +25,7 @@ void setupPart1(Adafruit_PCD8544 &display)
     }
     Serial.println("Serial ready");
     display.begin();
-    display.setContrast(40);
+    display.setContrast(50);
     display.clearDisplay();
     display.setTextSize(1);
     display.println("No connection!");
@@ -88,19 +88,19 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
 {
     ConnectionState curState{};
     printItems("Detecting connection...\n");
-//    display.clearDisplay();
-//    display.setCursor(0, 0);
-//    display.setTextSize(1);
-//    display.print("Detecting ...");
-//    display.display();
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.setTextSize(1);
+    display.print("Detecting ...");
+    display.display();
 
 
     detectConnection(curState);
-//    display.clearDisplay();
-//    display.setCursor(0, 0);
-//    display.setTextSize(1);
-//    display.print("Analyzing ...");
-//    display.display();
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.setTextSize(1);
+    display.print("Analyzing ...");
+    display.display();
 
     switch (curState.mode) {
         case ConnectionMode::Null: {
@@ -153,7 +153,7 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
             printItems("== Connection: C ==\n");
 
             printItems("port id: ", curState.data.c.port1, " ", curState.data.c.port2, "\n");
-            printItems("TODO. skipped.\n");
+
 
             const auto c_hh = measureCapacitancePrototype<>(
                     PORTS[curState.data.c.port1],
@@ -167,34 +167,7 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
             printItemsToDisplay(display, "Final result: C=", c_hh, "(nF)\n");
             display.display();
             delay(1000);
-//            display.clearDisplay();
 
-
-
-//            printMsg("Capacitance: %d",
-//                     static_cast<int>(measureCapacitance<CMeasureMode::LowR>(
-//                             PORTS[curState.data.c.port1],
-//                             PORTS[curState.data.c.port2]
-//                     )));
-//
-//            display.clearDisplay();
-//            display.setCursor(0, 0);
-//            display.setTextSize(1);
-//            display.print("Capacitor:");
-//            //ToDo:判断是高电容还是低电容，并且修改下面一行s为"HIGH"或者"LOW"
-//            String s = "HIGH";
-//            display.print(s);
-//
-//            display.setCursor(0, 12);
-//            display.print("Value:");
-//            //To Do:根据高阻低阻模式把电阻对应的变量名放到下面一行print里
-//            display.print(static_cast<int>(measureCapacitance<CMeasureMode::LowR>(
-//                    PORTS[curState.data.c.port1],
-//                    PORTS[curState.data.c.port2]
-//            )));
-//            display.display();
-//            delay(200);
-//            display.clearDisplay();
             break;
         }
 

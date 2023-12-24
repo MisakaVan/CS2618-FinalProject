@@ -129,7 +129,7 @@ void setupPart2(Adafruit_PCD8544 &display2)
 {
     Serial.begin(9600);
     display2.begin();
-    display2.setContrast(23);
+    display2.setContrast(50);
     display2.clearDisplay();
     pinMode(pin_B_up, OUTPUT);
     pinMode(pin_B_clk, OUTPUT);
@@ -201,6 +201,7 @@ void mainPart2_NPN(Adafruit_PCD8544 &display2,
         printItems("\n");
     }
     // display the curves
+    display2.clearDisplay();
     for (int curveIdx = 0; curveIdx < 4; ++curveIdx) {
         int prevX = 0, prevY = 47;
         for (int t = 0; t < 8; ++t) {

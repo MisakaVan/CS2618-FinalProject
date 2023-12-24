@@ -11,12 +11,23 @@
 
 void dischargeCapacitor(const Port &port1, const Port &port2)
 {
+//    clearPorts();
+//    pinMode(port1.analogPin, OUTPUT);
+//    digitalWrite(port1.analogPin, LOW);
+//    pinMode(port2.digitalPinLowR, OUTPUT);
+//    digitalWrite(port2.digitalPinLowR, LOW);
+//    delay(3000);
+//    clearPorts();
     clearPorts();
-    pinMode(port1.analogPin, OUTPUT);
-    digitalWrite(port1.analogPin, LOW);
+    // discharge the capacitor with the small resistor
+    pinMode(port1.digitalPinLowR, OUTPUT);
+    digitalWrite(port1.digitalPinLowR, LOW);
     pinMode(port2.digitalPinLowR, OUTPUT);
     digitalWrite(port2.digitalPinLowR, LOW);
-    delay(3000);
+    while (analogRead(port1.analogPin) > 1 || analogRead(port2.analogPin) > 1) {
+        delay(1);
+    }
+    delay(5);
     clearPorts();
 }
 
