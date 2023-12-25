@@ -158,7 +158,6 @@ void analyseTransistorNPN(int x, int y, int z, ConnectionState::StateData::t_fie
 void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port3,
                           ConnectionState::StateData::t_field &resultHolder)
 {
-//    bool feature[4];
     int count = 0;
     bool h[4] = {false, false, false, false};
 
