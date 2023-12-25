@@ -101,7 +101,7 @@ bool isResistor(ConnectionState::StateData::r_field &resultHolder)
         if (analogRead(port_b.analogPin) > 1 || curValue < 1022) {
             // if the r is too large, consider it as a capacitor
             const auto r = measureResistance<RMeasureMode::HighR>(port_a, port_b);
-            if (r > IS_R_LOWER_TH) {
+            if (r > IS_R_UPPER_TH) {
                 return false;
             }
 
