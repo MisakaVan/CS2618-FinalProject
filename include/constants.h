@@ -10,8 +10,12 @@
 #include "defines.h"
 
 // The high/low resistance of the resistor in the circuit.
+
 constexpr resistance_ohm_t HIGH_RESISTANCE = 510000;
 constexpr resistance_kOhm_t HIGH_RESISTANCE_K = HIGH_RESISTANCE / 1000.0;
+// Note! 470k is the actual value, but we failed to notice this error in this header
+// until the current code review, which seems too late QwQ (2023/12/26)
+
 constexpr resistance_ohm_t LOW_RESISTANCE = 680;
 constexpr resistance_kOhm_t LOW_RESISTANCE_K = LOW_RESISTANCE / 1000.0;
 // sqrt(HIGH_RESISTANCE * LOW_RESISTANCE)
