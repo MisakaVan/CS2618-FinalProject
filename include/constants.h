@@ -20,7 +20,7 @@ constexpr resistance_ohm_t LOW_RESISTANCE = 680;
 constexpr resistance_kOhm_t LOW_RESISTANCE_K = LOW_RESISTANCE / 1000.0;
 
 const capacitance_nanoF_t IS_C_LOWER_TH = 0.5;
-const resistance_ohm_t IS_R_LOWER_TH = 2000000;
+const resistance_ohm_t IS_R_UPPER_TH = 2000000;
 
 
 // The voltage of the power supply.
