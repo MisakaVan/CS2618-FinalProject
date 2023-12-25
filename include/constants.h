@@ -18,7 +18,6 @@ constexpr resistance_kOhm_t HIGH_RESISTANCE_K = HIGH_RESISTANCE / 1000.0;
 
 constexpr resistance_ohm_t LOW_RESISTANCE = 680;
 constexpr resistance_kOhm_t LOW_RESISTANCE_K = LOW_RESISTANCE / 1000.0;
-// sqrt(HIGH_RESISTANCE * LOW_RESISTANCE)
 
 const capacitance_nanoF_t IS_C_LOWER_TH = 0.5;
 const resistance_ohm_t IS_R_LOWER_TH = 2000000;
