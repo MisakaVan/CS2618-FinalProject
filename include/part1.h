@@ -103,7 +103,6 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
             break;
         }
 
-            //这部分加上去，LCD不亮了，不知道为什么，我怀疑有bug
         case ConnectionMode::C: {
             printItems("== Connection: C ==\n");
 
