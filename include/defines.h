@@ -54,7 +54,7 @@ struct Port {
     pinID_t digitalPinHighR;
     pinID_t digitalPinLowR;
 
-    Port(){}  // 
+    Port() {}  //
 
     constexpr Port(pinID_t analogPin, pinID_t digitalPinHighR, pinID_t digitalPinLowR) :
             analogPin(analogPin), digitalPinHighR(digitalPinHighR), digitalPinLowR(digitalPinLowR) {}
@@ -68,8 +68,6 @@ struct Port {
     }
 
 };
-
-
 
 
 struct ConnectionState {

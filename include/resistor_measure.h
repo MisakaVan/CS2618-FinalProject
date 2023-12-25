@@ -39,7 +39,6 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     delay(20);
 
     const auto aR = analogRead(port2.analogPin);
-//    const auto voltageOnConstantR = aR / 1023.0 * VCC;
 
     // VCC / (R+HighR) = voltageOnConstantR / (HighR)
     // R = HighR * (VCC / voltageOnConstantR - 1)
@@ -47,17 +46,6 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     // Avoid overflow in double.
     double ratioOfConstantR = 1023.0 / aR - 1;
     auto resistance = static_cast<resistance_ohm_t>(constantR * ratioOfConstantR);
-//    auto resistance_k = static_cast<resistance_kOhm_t>(constantR / 1000.0 * ratioOfConstantR);
-    // logging
-//    printItems(">>> measureR\n");
-//    printItems("    Mode: ", mode == RMeasureMode::LowR ? "LowR" : "HighR", '\n');
-//    printItems("    AnalogRead: ", aR, '\n');
-//    printItems("    Voltage on constantR: ", voltageOnConstantR, '\n');
-//    printItems("    Ratio of constantR: ", ratioOfConstantR, '\n');
-//    printItems("    ConstantR: ", static_cast<unsigned long>(constantR), '\n');
-//    printItems("    Resistance(ohm): ", static_cast<unsigned long>(resistance), '\n');
-//    printItems("    Resistance(kOhm): ", resistance_k, '\n');
-//    printItems("<<< measureR", '\n');
 
     if (aR <= 3 || aR >= 1015) {
         // aR too small means the R to be measured is too large for the given constant R.
@@ -69,20 +57,5 @@ resistance_ohm_t measureResistance(const Port &port1, const Port &port2)
     return resistance;
 }
 
-//// A test around measureResistance.
-//// Measure the resistance around two given ports.
-//// Print the resistance to Serial.
-//void testResistanceMeasure(const Port &port1, const Port &port2)
-//{
-//    auto resistance = measureResistance<RMeasureMode::LowR>(port1, port2);
-//    printMsg("LowR: %lld", resistance);
-//
-//    resistance = measureResistance<RMeasureMode::HighR>(port1, port2);
-//    printMsg("HighR: %lld", resistance);
-//
-//    printMsg("====================================");
-//
-//    delay(5 * 1000);
-//}
 
 #endif //FINALPROJECT_RESISTOR_MEASURE_H

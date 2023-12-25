@@ -154,7 +154,7 @@ void analyseTransistorNPN(int x, int y, int z, ConnectionState::StateData::t_fie
 }
 
 
-// main function to test trasistor
+// main function to test transistor
 void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port3,
                           ConnectionState::StateData::t_field &resultHolder)
 {
@@ -203,15 +203,6 @@ void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port
                 analyseTransistorPNP(3, 2, 1, resultHolder);
                 break;
         }
-
-        /*
-        if (feature[1])
-            analyseTransistorPNP(1, 2, 3, resultHolder);
-        else if (feature[2])
-            analyseTransistorPNP(2, 1, 3, resultHolder);
-        else
-            analyseTransistorPNP(3, 1, 2, resultHolder);
-        */
     } else if (count == 2)  // NPN
     {
         int i;
@@ -219,14 +210,6 @@ void testTrasistorMeasure(const Port &port1, const Port &port2, const Port &port
             if (!h[i]) break;
         }
         resultHolder.type = NPN;
-        /*
-        if (!feature[1])s
-            analyseTransistorNPN(1, 2, 3, resultHolder);
-        else if (!feature[2])
-            analyseTransistorNPN(2, 1, 3, resultHolder);
-        else if (!feature[3])
-            analyseTransistorNPN(3, 1, 2, resultHolder);
-        */
         switch (i) {
             case 1:
                 analyseTransistorNPN(1, 2, 3, resultHolder);

@@ -35,51 +35,6 @@ void setupPart1(Adafruit_PCD8544 &display)
 }
 
 
-///**
-// * Basic function test for measuring the R, C, T. Logs to Serial.
-// */
-//void testMainMeasurementToSerial(int intervalMs)
-//{
-//    ConnectionState curState{};
-//    detectConnection(curState);
-//    switch (curState.mode) {
-//        case ConnectionMode::Null: {
-//            printMsg("No connection detected");
-//        }
-//            break;
-//        case ConnectionMode::R: {
-//            printMsg("Resistance: %d",
-//                     static_cast<int>(measureResistance<RMeasureMode::LowR>(
-//                             PORTS[curState.data.r.port1],
-//                             PORTS[curState.data.r.port2]
-//                     )));
-//            break;
-//        }
-//        case ConnectionMode::C: {
-//            printMsg("Capacitance: %d",
-//                     static_cast<int>(measureCapacitance<CMeasureMode::LowR>(
-//                             PORTS[curState.data.c.port1],
-//                             PORTS[curState.data.c.port2]
-//                     )));
-//            break;
-//        }
-//        case ConnectionMode::T: {
-//            auto transistorType = curState.data.t.type;  // TransistorType
-//            beta_t beta = curState.data.t.beta;  // beta
-//            printMsg("Transistor Type: %s",
-//                     transistorType == TransistorType::PNP ? "PNP" : "NPN");
-//            printMsg("base: %u", curState.data.t.portB);
-//            printMsg("collector: %u", curState.data.t.portC);
-//            printMsg("emitter: %u", curState.data.t.portE);
-//            printMsg("Transistor Beta: %d", beta);
-//            break;
-//        }
-//    }
-//
-//    delay(intervalMs);
-//
-//}
-
 /**
  * Basic function test for measuring the R, C, T. Logs to LCD.
  * @param intervalMs
@@ -176,14 +131,12 @@ void testMainMeasurementToDisplay(Adafruit_PCD8544 &display, int intervalMs)
 
 
             auto transistorType = curState.data.t.type;  // TransistorType
-//            beta_t beta = curState.data.t.beta;  // beta
             printMsg("Transistor Type: %s",
                      transistorType == TransistorType::PNP ? "PNP" : "NPN");
             printMsg("b: %u ", curState.data.t.portB);
             printMsg("c: %u ", curState.data.t.portC);
             printMsg("e: %u ", curState.data.t.portE);
             printItems("Beta: ", curState.data.t.beta, '\n');
-
 
 
             display.clearDisplay();
