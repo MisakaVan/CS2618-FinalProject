@@ -14,7 +14,9 @@
 # define PART 2
 
 #if PART == 1
+
 #include "part1.h"
+
 #elif PART == 2
 #include "part2.h"
 #endif
