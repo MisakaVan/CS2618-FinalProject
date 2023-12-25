@@ -12,11 +12,6 @@
 #include "constants.h"
 #include "utils.h"
 
-// int B_control=6;
-// int B_clk=5;
-
-// int C_control=10;
-// int C_clk=9;
 
 
 voltage_V_t resultUce[4][8]{};
@@ -25,8 +20,6 @@ current_uA_t resultIb[4][8]{};
 
 voltage_V_t maxRes_V = 0;
 current_mA_t maxRes_mA = 0;
-
-//Adafruit_PCD8544 display2 = Adafruit_PCD8544(8, 7, 17, 16, 15);
 
 voltage_V_t curUb()
 {
@@ -85,7 +78,7 @@ void clearPotentiometer()
 
 }
 
-// templatize the above 4 functions
+
 enum class Ptt {
     B, C
 };
@@ -115,15 +108,7 @@ void movePtt(int count)
     }
 }
 
-void printAllCurState()
-{
-    printItems("all\n");
-    printItems("ub:", curUb(), "\n");
-    printItems("uc:", curUc(), "\n");
-    printItems("ib:", curIb(), "\n");
-    printItems("ic:", curIc(), "\n");
-    printItems("\n");
-}
+
 
 void setupPart2(Adafruit_PCD8544 &display2)
 {
