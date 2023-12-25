@@ -17,6 +17,7 @@ constexpr resistance_kOhm_t LOW_RESISTANCE_K = LOW_RESISTANCE / 1000.0;
 // sqrt(HIGH_RESISTANCE * LOW_RESISTANCE)
 
 const capacitance_nanoF_t IS_C_LOWER_TH = 0.5;
+const resistance_ohm_t IS_R_LOWER_TH = 2000000;
 
 
 // The voltage of the power supply.
